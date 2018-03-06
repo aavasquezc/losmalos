@@ -1,0 +1,12 @@
+co\com\canonical\flights\FlightAttributes.class
+co\com\canonical\flights\ObjectFactory.class
+co\com\canonical\flights\FlightLeg.class
+co\com\canonical\flights\package-info.class
+co\com\canonical\flights\Airports.class
+co\com\canonical\flights\Usages.class
+co\com\core\transformer\FlightsTransformer.class
+co\com\canonical\flights\Aircraft.class
+co\com\canonical\flights\Dates.class
+co\com\core\evaluator\FlightsEvaluator.class
+co\com\canonical\flights\Usage.class
+co\com\canonical\flights\FlightLegMessage.class

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+	<import resource="mq-conf.xml" />
+	<context:component-scan base-package="co.com.core.evaluator" />
+	<context:component-scan base-package="co.com.core.transformer" />
+	
+	<camel:camelContext
+		xmlns:p="http://xml.mxi.com/xsd/csi/swa/flight/flight-leg-response/1.0">
+
+		<camel:dataFormats>
+			<camel:jaxb id="jaxb" contextPath="co.com.canonical.flights"
+				fragment="true" partClass="co.com.canonical.flights.FlightLeg" />
+
+		</camel:dataFormats>
+
+		<camel:route id="aircraft-line-integration">
+
+			<camel:from uri="activemq:queue:FLIGHTS.BRIDGE.QUEUE" />
+
+			<camel:split>
+				<camel:xpath>/p:flight-leg-message/p:flight-leg</camel:xpath>
+				<camel:unmarshal ref="jaxb"/>
+				<camel:to uri="seda:leg-integration" />
+			</camel:split>
+
+		</camel:route>
+
+		<camel:route id="leg-integration">
+
+			<camel:from uri="seda:leg-integration" />
+
+			<camel:log message="el flujo esta operando por MQ" />
+
+			<camel:choice>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkIngate}</camel:simple>
+					<camel:log message="EL MENSAJE ES UN INGATE" />
+					<camel:marshal ref="jaxb"/>
+					<camel:to uri="file:C:/filesaes/il/output-ingate?fileName=output-${id}.xml" />
+				</camel:when>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkOutgate}</camel:simple>
+					<camel:log message="EL MENSAJE ES UN OUTGATE" />
+					<camel:to uri="bean:flightsTransformer?method=transform" />
+					<camel:to uri="file:C:/filesaes/il/output-outgate?fileName=output-${id}.xml" />
+				</camel:when>
+			</camel:choice>
+
+		</camel:route>
+
+	</camel:camelContext>
+
+</beans>
