@@ -13,43 +13,40 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 	<context:component-scan base-package="co.com.core.transformer" />
 	
 	<camel:camelContext
-		xmlns:p="http://xml.mxi.com/xsd/csi/swa/flight/flight-leg-response/1.0">
+		xmlns="http://camel.apache.org/schema/spring"
+		xmlns:tns="http://aerolineas-latinoamericanas/contract/messages">
 
 		<camel:dataFormats>
 			<camel:jaxb id="jaxb" contextPath="co.com.canonical.flights"
 				fragment="true" partClass="co.com.canonical.flights.FlightLeg" />
 
 		</camel:dataFormats>
-
-		<camel:route id="aircraft-line-integration">
-
+		
+		<camel:route id="aircratline-integration">
 			<camel:from uri="activemq:queue:FLIGHTS.BRIDGE.QUEUE" />
-
-			<camel:split>
-				<camel:xpath>/p:flight-leg-message/p:flight-leg</camel:xpath>
-				<camel:unmarshal ref="jaxb"/>
-				<camel:to uri="seda:leg-integration" />
-			</camel:split>
-
+			<camel:log message="Iniciando aircratline-integration" />
+			<camel:choice>
+				<camel:when id="tail-number-validator">
+					<camel:xpath>/tns:aircratline-message[tns:tail-number!='']</camel:xpath>
+					<camel:log message="aircratline TRUE" />
+                    <camel:split>
+						<camel:xpath>/tns:aircratline-message/tns:flight-leg</camel:xpath>
+						<camel:unmarshal ref="jaxb"/>
+						<camel:to uri="seda:leg-integration" />
+					</camel:split>
+                </camel:when>
+			</camel:choice>
 		</camel:route>
 
 		<camel:route id="leg-integration">
-
 			<camel:from uri="seda:leg-integration" />
-
-			<camel:log message="el flujo esta operando por MQ" />
+			<camel:log message="Operando el LEG" />
 			<camel:choice>
 				<camel:when>
-					<camel:simple>${bean:flightsEvaluator?method=checkIngate}</camel:simple>
-					<camel:log message="EL MENSAJE ES UN INGATE" />
+					<camel:simple>${bean:flightsEvaluator?method=checkStatusFlight}</camel:simple>
+					<camel:log message="LEG valido para BPEL" />
 					<camel:marshal ref="jaxb"/>
-					<camel:to uri="file:C:/filesaes/il/output-ingate?fileName=output-${id}.xml" />
-				</camel:when>
-				<camel:when>
-					<camel:simple>${bean:flightsEvaluator?method=checkOutgate}</camel:simple>
-					<camel:log message="EL MENSAJE ES UN OUTGATE" />
-					<camel:to uri="bean:flightsTransformer?method=transform" />
-					<camel:to uri="file:C:/filesaes/il/output-outgate?fileName=output-${id}.xml" />
+					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" />
 				</camel:when>
 			</camel:choice>
 

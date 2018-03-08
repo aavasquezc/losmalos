@@ -10,6 +10,7 @@ package co.com.canonical.flights;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -255,6 +256,8 @@ public class FlightLeg {
     protected Airports airports;
     @XmlElement(required = true)
     protected Dates dates;
+    @XmlAttribute(name="status")
+    private String status;
 
     /**
      * Gets the value of the flightAttributes property.
@@ -374,6 +377,20 @@ public class FlightLeg {
      */
     public void setDates(Dates value) {
         this.dates = value;
+    }
+    
+    /** Getter.
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /** Setter.
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
