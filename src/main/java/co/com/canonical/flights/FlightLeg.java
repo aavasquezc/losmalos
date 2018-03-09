@@ -243,7 +243,8 @@ import javax.xml.bind.annotation.XmlType;
     "aircraft",
     "usages",
     "airports",
-    "dates"
+    "dates",
+    "domainEvents"
 })
 public class FlightLeg {
 
@@ -256,8 +257,38 @@ public class FlightLeg {
     protected Airports airports;
     @XmlElement(required = true)
     protected Dates dates;
+    
     @XmlAttribute(name="status")
     private String status;
+    @XmlAttribute(name="external-key")
+    private String externalKey;
+
+    @XmlElement(name = "domain-events")
+    protected DomainEvents domainEvents;
+
+    /**
+     * Gets the value of the domainEvents property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link domainEvents }
+     *     
+     */
+    public DomainEvents getDomainEvents() {
+        return domainEvents;
+    }
+
+    /**
+     * Sets the value of the domainEvents property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link domainEvents }
+     *     
+     */
+    public void setDomainEvents(DomainEvents value) {
+        this.domainEvents = value;
+    }
 
     /**
      * Gets the value of the flightAttributes property.
@@ -391,6 +422,20 @@ public class FlightLeg {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    /** Getter.
+     * @return the status
+     */
+    public String getExternalKey() {
+        return externalKey;
+    }
+
+    /** Setter.
+     * @param status the status to set
+     */
+    public void setExternalKey(String externalKey) {
+        this.status = externalKey;
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:p="http://xml.mxi.com/xsd/csi/swa/flight/flight-leg-response/1.0"
+	xmlns:tns="http://aerolineas-latinoamericanas/contract/messages"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	exclude-result-prefixes="#default p">
 	<xsl:template match="/">

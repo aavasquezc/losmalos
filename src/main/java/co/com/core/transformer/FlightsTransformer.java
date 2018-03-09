@@ -13,13 +13,15 @@ public class FlightsTransformer {
 		FlightLeg leg = exchange.getIn().getBody(FlightLeg.class);
 		
 		StringBuilder xml = new StringBuilder();
-		xml.append("<OUTGATE-FLIGHTS>");
+		xml.append("<flight-leg>");
 		xml.append("<EXTERNAL-KEY>");
-		xml.append(leg.getFlightAttributes().getExternalKey());
+		xml.append(leg.getStatus());
 		xml.append("</EXTERNAL-KEY>");
-		xml.append("</OUTGATE-FLIGHTS>");
-		
+		xml.append("</flight-leg>");
+
 		exchange.getIn().setBody(xml.toString());
+		
+//		exchange.getIn();
 	}
 
 }
