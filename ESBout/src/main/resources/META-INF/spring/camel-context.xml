@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+	<import resource="mq-conf.xml" />
+	<context:component-scan base-package="co.com.core.evaluator" />
+	<context:component-scan base-package="co.com.core.transformer" />
+	
+	<camel:camelContext
+		xmlns="http://camel.apache.org/schema/spring"
+		xmlns:tns="http://aerolineas-latinoamericanas/contract/messages">
+
+		<camel:dataFormats>
+			<camel:jaxb id="jaxb" contextPath="co.com.canonical.flights"
+				fragment="true" partClass="co.com.canonical.flights.FlightLeg" />
+
+		</camel:dataFormats>
+		
+		<camel:route id="aircratline-integration">
+			<camel:from uri="activemq:queue:FLIGHTS.BRIDGE.QUEUE" />
+			<camel:log message="Iniciando aircratline-integration" />
+			<camel:choice>
+				<camel:when id="tail-number-validator">
+					<camel:xpath>/tns:aircratline-message[tns:tail-number!='']</camel:xpath>
+					<camel:log message="aircratline TRUE" />
+                    <camel:split>
+						<camel:xpath>/tns:aircratline-message/tns:flight-leg</camel:xpath>
+						<camel:unmarshal ref="jaxb"/>
+						<camel:to uri="seda:leg-integration" />
+					</camel:split>
+                </camel:when>
+			</camel:choice>
+		</camel:route>
+
+		<camel:route id="leg-integration">
+			<camel:from uri="seda:leg-integration" />
+			<camel:log message="Operando el LEG" />
+			<camel:choice>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkStatusFlight}</camel:simple>
+					<camel:log message="LEG valido para BPEL" />
+					<camel:marshal ref="jaxb"/>
+					<camel:to uri="bean:flightsTransformer?method=transform" />
+					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" />
+				</camel:when>
+			</camel:choice>
+
+		</camel:route>
+
+	</camel:camelContext>
+
+</beans>
