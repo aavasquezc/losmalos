@@ -23,6 +23,7 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 		</camel:dataFormats>
 		
 		<camel:route id="aircratline-integration">
+<!-- 			<camel:from uri="rabbitmq://localhost:15672/aircraft-exchange?routingKey=aircraft-bridge-queue" /> -->
 			<camel:from uri="activemq:queue:FLIGHTS.BRIDGE.QUEUE" />
 			<camel:log message="Iniciando aircratline-integration" />
 			<camel:choice>
