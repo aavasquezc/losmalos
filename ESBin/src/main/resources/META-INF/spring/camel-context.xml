@@ -47,7 +47,8 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 					<camel:log message="LEG valido para BPEL" />
 <!-- 					<camel:marshal ref="jaxb"/> -->
 					<camel:to uri="bean:flightsTransformer?method=transform" />
-					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" />
+<!-- 					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" /> -->
+					<camel:to uri="file:/opt/il/inbpel?fileName=inbpel-${id}.xml" />
 				</camel:when>
 			</camel:choice>
 
