@@ -4,6 +4,8 @@ import org.apache.camel.Exchange;
 import org.springframework.stereotype.Component;
 
 import co.com.canonical.flights.FlightLeg;
+import co.com.canonical.flights.OperationalInfo;
+import co.com.canonical.flights.ScheduledInfo;
 import co.com.canonical.flights.DomainEventsInfo;
 import co.com.canonical.flights.DomainEventsInfo.ActualIngate;
 import co.com.canonical.flights.DomainEventsInfo.ActualOutgate;
@@ -26,6 +28,37 @@ public class FlightsTransformer {
 		xml.append("<status>");
 		xml.append(leg.getStatus());
 		xml.append("</status>\n");
+
+		try {
+			OperationalInfo operationalInfo = leg.getOperationalInfo();
+
+			xml.append("<departure-airport>");
+			xml.append(operationalInfo.getDepartureAirport());
+			xml.append("</departure-airport>\n");
+			xml.append("<arrival-airport>");
+			xml.append(operationalInfo.getArrivalAirport());
+			xml.append("</arrival-airport>\n");
+		}
+		catch (Exception e) {}
+
+		try {
+			ScheduledInfo scheduledInfo = leg.getScheduledInfo();
+
+			xml.append("<estimated-outgate>");
+			xml.append(scheduledInfo.getEstimatedOutgate());
+			xml.append("</estimated-outgate>\n");
+			xml.append("<estimated-ingate>");
+			xml.append(scheduledInfo.getEstimatedIngate());
+			xml.append("</estimated-ingate>\n");
+			xml.append("<estimated-outgate-time>");
+			xml.append(scheduledInfo.getEstimatedOutgateTime());
+			xml.append("</estimated-outgate-time>\n");
+			xml.append("<estimated-ingate-time>");
+			xml.append(scheduledInfo.getEstimatedIngateTime());
+			xml.append("</estimated-ingate-time>\n");
+		}
+		catch (Exception e) {}
+
 
 		DomainEventsInfo domainEventsInfo = leg.getDomainEventsInfo();
 		xml.append("<domain-events>\n");

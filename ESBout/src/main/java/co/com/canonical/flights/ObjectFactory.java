@@ -45,22 +45,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AircratlineMessage }
-     * 
-     */
-    public AircratlineMessage createAircratlineMessage() {
-        return new AircratlineMessage();
-    }
-
-    /**
-     * Create an instance of {@link FlightLeg }
-     * 
-     */
-    public FlightLeg createFlightLeg() {
-        return new FlightLeg();
-    }
-
-    /**
      * Create an instance of {@link ScheduledInfo }
      * 
      */
