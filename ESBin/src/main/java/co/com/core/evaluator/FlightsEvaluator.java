@@ -10,8 +10,7 @@ public class FlightsEvaluator {
 	
 	public boolean checkStatusFlight(final Exchange exchange) {
 		FlightLeg leg = exchange.getIn().getBody(FlightLeg.class);
-		return true;
-//		return !leg.getStatus().value().equals("COMPLETED");
+		return !leg.getStatus().value().equals("COMPLETED");
 	}
 
 }
