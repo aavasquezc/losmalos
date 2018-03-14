@@ -16,21 +16,48 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 		xmlns="http://camel.apache.org/schema/spring" >
 
 		<camel:dataFormats>
-			<camel:jaxb id="jaxb" contextPath="co.com.canonical.flights" />
+			<camel:jaxb id="jaxb" contextPath="co.com.canonical.responseFuse" />
 
 		</camel:dataFormats>
 		
-		<camel:route id="flight-leg-integration">
-			<camel:from uri="activemq:queue:FLIGHTS.BRIDGE.QUEUE" />
-			<camel:log message="Iniciando flight-leg-integration" />
+		<camel:route id="bpel-integration">
+			<camel:from uri="file:\\25.6.114.222\outputfiles" />
+<!-- 			<camel:from uri="activemq:queue:DOMAINS.EVENT.QUEUE" /> -->
+			<camel:log message="Operando Domain Event" />
 			<camel:choice>
-				<camel:when id="blizard-integration">
-					<camel:simple>${bean:DomainEventsInfoEvaluator?method=checkBlizard}</camel:simple>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkBlizard}</camel:simple>
 					<camel:log message="Blizard" />
 					<camel:to uri="bean:flightsTransformer?method=transformBlizard" />
-					<camel:to uri="file:C:/filesaes/il/blizard?fileName=blizard.xml" />
-                </camel:when>
+					<camel:to uri="file:C:/filesaes/il/blizard?fileName=blizard-${date:now:yyyyMMddHHmmyss}.xml" />
+<!-- 					<camel:to uri="file:/opt/target-systems/blizard?fileName=inbpel-${id}.xml" /> -->
+				</camel:when>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkFlightsGuard}</camel:simple>
+					<camel:log message="FlightsGuard" />
+					<camel:to uri="bean:flightsTransformer?method=transformFlightsGuard" />
+					<camel:to uri="activemq:queue:FLIGHTS.GUARD.REQUEST.QUEUE" />
+				</camel:when>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkCancelFlight}</camel:simple>
+					<camel:log message="CancelFlight" />
+					<camel:to uri="bean:flightsTransformer?method=transformCancelFlight" />
+<!-- 					<setHeader headerName="Exchange.HTTP_METHOD"> -->
+<!-- 				    	<constant>POST</constant> -->
+<!-- 				  	</setHeader> -->
+<!-- 					<camel:to uri="http://25.6.114.222:9494/web-sandbox-api/endpoint/rest/cancel-api/process" /> -->
+				</camel:when>
+				<camel:when>
+					<camel:simple>${bean:flightsEvaluator?method=checkMaintenancePlanner}</camel:simple>
+					<camel:log message="CancelFlight" />
+					<camel:to uri="bean:flightsTransformer?method=transformCancelFlight" />
+<!-- 					<setHeader headerName="Exchange.HTTP_METHOD"> -->
+<!-- 				    	<constant>POST</constant> -->
+<!-- 				  	</setHeader> -->
+<!-- 					<camel:to uri="http://25.6.114.222:9494/web-sandbox-api/endpoint/rest/cancel-api/process" /> -->
+				</camel:when>
 			</camel:choice>
+
 		</camel:route>
 
 	</camel:camelContext>

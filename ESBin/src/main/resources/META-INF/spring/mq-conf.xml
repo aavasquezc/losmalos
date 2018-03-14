@@ -29,11 +29,11 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 	</bean>
 	
 	
-	<bean id="rabbitConnectionFactory" class="com.rabbitmq.client.ConnectionFactory">
-	  <property name="host" value="localhost"/>
-	  <property name="port" value="15672"/>
-	  <property name="username" value="guest"/>
-	  <property name="password" value="guest"/>
-	</bean>
+<!-- 	<bean id="rabbitConnectionFactory" class="com.rabbitmq.client.ConnectionFactory"> -->
+<!-- 	  <property name="host" value="localhost"/> -->
+<!-- 	  <property name="port" value="15672"/> -->
+<!-- 	  <property name="username" value="guest"/> -->
+<!-- 	  <property name="password" value="guest"/> -->
+<!-- 	</bean> -->
 
 </beans>

@@ -1,0 +1,95 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/app_pica/integration_fuse/BPELProcess" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="process">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="operational-info">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="departure-airport"/>
+              <xs:element type="xs:string" name="arrival-airport"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="scheduled-info">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="estimated-outgate"/>
+              <xs:element type="xs:string" name="estimated-ingate"/>
+              <xs:element type="xs:string" name="estimated-outgate-time"/>
+              <xs:element type="xs:string" name="estimated-ingate-time"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="domain-events-info">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="alert-on-air">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="description"/>
+                    <xs:element type="xs:string" name="alert-type"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="on-air-shopping">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="description"/>
+                    <xs:element type="xs:string" name="credit-card-number"/>
+                    <xs:element type="xs:string" name="value"/>
+                    <xs:element type="xs:string" name="transaction-date"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="actual-outgate">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="date"/>
+                    <xs:element type="xs:string" name="gate-code"/>
+                    <xs:element type="xs:string" name="fuel-percentage"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="actual-ingate">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="date"/>
+                    <xs:element type="xs:string" name="gate-code"/>
+                    <xs:element type="xs:string" name="fuel-percentage"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="estimated-outgate">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="date"/>
+                    <xs:element type="xs:string" name="gate-code"/>
+                    <xs:element type="xs:string" name="fuel-percentage"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="estimated-ingate">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="date"/>
+                    <xs:element type="xs:string" name="gate-code"/>
+                    <xs:element type="xs:string" name="fuel-percentage"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="cancel-flight">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="description"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="external-key"/>
+      <xs:attribute type="xs:string" name="status"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

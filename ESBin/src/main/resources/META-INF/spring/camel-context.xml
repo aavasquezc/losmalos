@@ -28,6 +28,24 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 			<camel:log message="Iniciando aircratline-integration" />
 			<camel:choice>
 				<camel:when id="tail-number-validator">
+					<camel:xpath>/tns:aircratline-message[tns:tail-number='MK00010']</camel:xpath>
+					<camel:log message="aircratline TRUE" />
+                    <camel:split>
+						<camel:xpath>/tns:aircratline-message/tns:flight-leg</camel:xpath>
+						<camel:unmarshal ref="jaxb"/>
+						<camel:to uri="seda:leg-integration" />
+					</camel:split>
+                </camel:when>
+				<camel:when id="tail-number-validator">
+					<camel:xpath>/tns:aircratline-message[tns:tail-number='MK00011']</camel:xpath>
+					<camel:log message="aircratline TRUE" />
+                    <camel:split>
+						<camel:xpath>/tns:aircratline-message/tns:flight-leg</camel:xpath>
+						<camel:unmarshal ref="jaxb"/>
+						<camel:to uri="seda:leg-integration" />
+					</camel:split>
+                </camel:when>
+				<camel:when id="tail-number-validator">
 					<camel:xpath>/tns:aircratline-message[tns:tail-number='MK00012']</camel:xpath>
 					<camel:log message="aircratline TRUE" />
                     <camel:split>
@@ -48,8 +66,8 @@ http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/came
 					<camel:log message="LEG valido para BPEL" />
 <!-- 					<camel:marshal ref="jaxb"/> -->
 					<camel:to uri="bean:flightsTransformer?method=transform" />
-<!-- 					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" /> -->
-					<camel:to uri="file:/opt/il/inbpel?fileName=inbpel-${id}.xml" />
+					<camel:to uri="file:C:/filesaes/il/inbpel?fileName=inbpel-${id}.xml" />
+<!-- 					<camel:to uri="file:/opt/il/inbpel?fileName=inbpel-${id}.xml" /> -->
 				</camel:when>
 			</camel:choice>
 
